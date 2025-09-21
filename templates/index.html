@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Iris Flower Classifier</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      margin: 0; 
+      background: url("{{ url_for('static', filename='download.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      height: 100vh; 
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 30px; 
+      border-radius: 15px; 
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3); 
+      width: 800px;              /* wider for two-column layout */
+      display: flex;             /* side by side layout */
+      gap: 30px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .left, .right {
+      flex: 1;
+    }
+
+    h1 { 
+      color: #333; 
+      margin-bottom: 20px; 
+      text-align: center;
+    }
+
+    form { text-align: left; }
+
+    label { 
+      font-weight: bold; 
+      display: block; 
+      margin-top: 10px; 
+    }
+
+    input { 
+      width: 100%; 
+      padding: 10px; 
+      margin-top: 5px; 
+      border: 1px solid #ccc; 
+      border-radius: 8px; 
+      font-size: 14px;
+    }
+
+    button { 
+      background: linear-gradient(45deg, #4CAF50, #2e7d32); 
+      color: white; 
+      border: none; 
+      padding: 12px; 
+      margin-top: 15px; 
+      width: 100%; 
+      border-radius: 10px; 
+      cursor: pointer; 
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    button:hover { 
+      background: linear-gradient(45deg, #45a049, #1b5e20); 
+      transform: scale(1.05);
+    }
+
+    .result { 
+      font-size: 1.3em; 
+      font-weight: bold; 
+      padding: 12px; 
+      border-radius: 8px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .setosa { background: #e6f7e6; color: #2e7d32; border: 2px solid #2e7d32; }
+    .versicolor { background: #e6f0ff; color: #1a4d8f; border: 2px solid #1a4d8f; }
+    .virginica { background: #f9e6ff; color: #6a1b9a; border: 2px solid #6a1b9a; }
+
+    .flower-img {
+      animation: fadeIn 1s ease-in-out;
+      text-align: center;
+    }
+
+    .flower-img img {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Left: Input Form -->
+    <div class="left">
+      <h1>Iris Flower Prediction 🌸</h1>
+      <form method="POST" action="/predict">
+        <label>Sepal Length (cm)</label>
+        <input type="number" step="0.1" name="sepal_length" required>
+
+        <label>Sepal Width (cm)</label>
+        <input type="number" step="0.1" name="sepal_width" required>
+
+        <label>Petal Length (cm)</label>
+        <input type="number" step="0.1" name="petal_length" required>
+
+        <label>Petal Width (cm)</label>
+        <input type="number" step="0.1" name="petal_width" required>
+
+        <button type="submit">Predict</button>
+      </form>
+    </div>
+
+    <!-- Right: Prediction Result + Image -->
+    <div class="right">
+      {% if result %}
+        <div class="result 
+          {% if 'Setosa' in result %} setosa 
+          {% elif 'Versicolor' in result %} versicolor 
+          {% elif 'Virginica' in result %} virginica 
+          {% endif %}">
+          {{ result }}
+        </div>
+
+        {% if image_url %}
+          <div class="flower-img">
+            <img src="{{ image_url }}" alt="Predicted Flower">
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+
+  </div>
+</body>
+</html>
